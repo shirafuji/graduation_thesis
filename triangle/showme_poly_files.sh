@@ -1,5 +1,5 @@
 #! /bin/bash
 for file_name in `ls *.1.ele`
 do
-showme "$file_name"
+showme "./../poly/$file_name"
 done
