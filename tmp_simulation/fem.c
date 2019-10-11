@@ -14,16 +14,20 @@ void modified_cholesky(double**,double*,int);
 void LD_solver(double**, double*, double*,int);
 void FEM(int, char*);
 void init(int, char*);
-void boundary(int);
+void boundary(int, int);
 
 int main(int argc,char *argv[]){
   char *filename;
+  int boudary_type;
+  //要素情報ファイル名
   filename = argv[1];
+  //境界条件タイプ
+  boudary_type = atoi(argv[2]);
   clock_t start,end;
   int n = 50;
   double time;
   init(n, filename);
-  boundary(n);
+  boundary(n, boudary_type);
   start = clock();
   FEM(n, filename);
   end = clock();
@@ -91,7 +95,7 @@ void init(int n, char *filename){
 }
 
 // 境界条件を与える関数
-void boundary(int n){
+void boundary(int n, int boundary_type){
   int N = n*n;
   int u[N];
   int i;
@@ -101,29 +105,60 @@ void boundary(int n){
 
   //基本境界条件を与える
 
-  //右辺は0度
-  for(i=0; i<N; i++) {
-    if(i%n==n-1) {
-      u[i] = 0;
-      if (i == 1200) {
-        u[i] = 100;
+  if (boundary_type == 1) {
+    //右辺は0度
+    for(i=0; i<N; i++) {
+      if(i%n==n-1) {
+        u[i] = 0;
+        if (i == 1200) {
+          u[i] = 100;
+        }
+        fprintf(file,"%d,%d\n",i,u[i]);
       }
-      fprintf(file,"%d,%d\n",i,u[i]);
     }
+    //右辺真ん中は100度
+    u[1200] = 100;
+    fprintf(file,"%d,%d\n",1200,u[1200]);
+    u[1250] = 100;
+    fprintf(file,"%d,%d\n",1250,u[1250]);
+    u[1300] = 100;
+    fprintf(file,"%d,%d\n",1300,u[1300]);
+    u[1150] = 100;
+    fprintf(file,"%d,%d\n",1150,u[1150]);
+    u[1100] = 100;
+    fprintf(file,"%d,%d\n",1100,u[1100]);
   }
-
-  //真ん中は100度
-  u[1200] = 100;
-  fprintf(file,"%d,%d\n",1200,u[1200]);
-  u[1250] = 100;
-  fprintf(file,"%d,%d\n",1250,u[1250]);
-  u[1300] = 100;
-  fprintf(file,"%d,%d\n",1300,u[1300]);
-  u[1150] = 100;
-  fprintf(file,"%d,%d\n",1150,u[1150]);
-  u[1100] = 100;
-  fprintf(file,"%d,%d\n",1100,u[1100]);
-
+  if (boundary_type == 3) {
+    //右辺は0度
+    for(i=0; i<N; i++) {
+      if(i%n==n-1) {
+        u[i] = 0;
+        if (i == 1200) {
+          u[i] = 100;
+        }
+        fprintf(file,"%d,%d\n",i,u[i]);
+      }
+    }
+    //左辺上下真ん中は100度
+    u[2450] = 100;
+    fprintf(file,"%d,%d\n",2450,u[2450]);
+    u[2400] = 100;
+    fprintf(file,"%d,%d\n",2400,u[2400]);
+    u[0] = 100;
+    fprintf(file,"%d,%d\n",0,u[0]);
+    u[50] = 100;
+    fprintf(file,"%d,%d\n",50,u[50]);
+    u[1200] = 100;
+    fprintf(file,"%d,%d\n",1200,u[1200]);
+    u[1250] = 100;
+    fprintf(file,"%d,%d\n",1250,u[1250]);
+    u[1300] = 100;
+    fprintf(file,"%d,%d\n",1300,u[1300]);
+    u[1150] = 100;
+    fprintf(file,"%d,%d\n",1150,u[1150]);
+    u[1100] = 100;
+    fprintf(file,"%d,%d\n",1100,u[1100]);
+  }
   fclose(file);
 }
 
