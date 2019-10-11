@@ -250,7 +250,6 @@ void FEM(int n, char *filename){
 
   double part_matrix[nodes][nodes];
   //要素合成マトリックスを作って全体合成マトリックスを計算
-  //ここでエラーが起きています！
   for(i=0; i<ele; i++) {
     //aを定義*
     for(j=0; j<dim; j++) {
@@ -341,7 +340,11 @@ void FEM(int n, char *filename){
   cg(matrix,u_dash,N);
   //modified_cholesky(matrix,u_dash,N);
 
-  file = fopen("temperature.csv","w");
+  char* tmp_file;
+  char* extention;
+  extention = ".csv";
+  tmp_file = strcat(filename, extention);
+  file = fopen(tmp_file,"w");
   fprintf(file,"x,y,t\n");
   for(i=0; i<N; i++) {
     fprintf(file,"%lf,%lf,%lf\n",coord[i][0],coord[i][1],u_dash[i]);
