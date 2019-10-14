@@ -32,7 +32,7 @@ def main():
 	
 	# output
 	basename = os.path.splitext(filename)[0]
-	
+	basename = "tmp_vtk/" + basename.split('/')[4]
 	file = open(basename + ".vtk", "w")
 	
 	file.write("# vtk DataFile Version 2.0\n")
