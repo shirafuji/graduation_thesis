@@ -5,4 +5,4 @@
 /tmp_simulation/coord.txt
 /tmp_simulation/nop.txt
 /tmp_simulation/tmp_vtk/*
-!/tmp_simulation//tmp_vtk/.gitkeep
+!/tmp_simulation/tmp_vtk/.gitkeep
