@@ -352,7 +352,7 @@ void FEM(int n, char *filename, int x, int y){
 
   FILE *file_position;
   file_position = fopen(tmp_file_position,"a");
-  fprintf(file_position, "%lf,", (x/10)*5 + (y/10)+1);
+  fprintf(file_position, "%d,", (x/10)*5 + (y/10)+1);
   for(i=0; i<N; i++) {
     if (coord[i][0] == 0) {
       fprintf(file_position, "%lf,", u_dash[i]);
@@ -362,7 +362,7 @@ void FEM(int n, char *filename, int x, int y){
   fclose(file_position);
   FILE *file_size;
   file_size = fopen(tmp_file_size,"a");
-  fprintf(file_size, "%lf,", 5);
+  fprintf(file_size, "%d,", 5);
   for(i=0; i<N; i++) {
     if (coord[i][0] == 0) {
       fprintf(file_size, "%lf", u_dash[i]);
