@@ -23,8 +23,8 @@ int main(int argc,char *argv[]){
     for (int j = 0; j < n-4; j++) {
       //用いるeleファイル名
       char *filename;
-      char char_i;
-      char char_j;
+      char *char_i;
+      char *char_j;
       sprintf(char_i, "%d", i+1);
       sprintf(char_j, "%d", j+1);
       strcat(filename, "./../triangle/poly/four_holes_");
