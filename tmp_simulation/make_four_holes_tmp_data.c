@@ -32,6 +32,7 @@ int main(int argc,char *argv[]){
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
+      printf("%s", filename);
       //境界条件タイプ
       boudary_type = atoi(argv[1]);
       clock_t start,end;
