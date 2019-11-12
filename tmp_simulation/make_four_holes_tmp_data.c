@@ -23,16 +23,15 @@ int main(int argc,char *argv[]){
     for (int j = 0; j < n-4; j++) {
       //用いるeleファイル名
       char *filename;
-      char *char_i;
-      char *char_j;
-      sprintf(char_i, "%d", i+1);
-      sprintf(char_j, "%d", j+1);
+      char char_i[12];
+      char char_j[12];
+      snprintf(char_i, 12, "%d", i+1);
+      snprintf(char_j, 12, "%d", j+1);
       strcat(filename, "./../triangle/poly/four_holes_");
       strcat(filename, char_i);
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
-      // filename = "./../triangle/poly/four_holes_" + char_i + "_" + char_j + ".1.ele";
       //境界条件タイプ
       boudary_type = atoi(argv[1]);
       clock_t start,end;
