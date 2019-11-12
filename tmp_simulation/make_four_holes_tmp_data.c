@@ -23,10 +23,10 @@ int main(int argc,char *argv[]){
     for (int j = 0; j < n-4; j++) {
       //用いるeleファイル名
       char *filename;
-      char char_i[256];
-      char char_j[256];
-      snprintf(char_i, 256, "%d", i+1);
-      snprintf(char_j, 256, "%d", j+1);
+      char char_i;
+      char char_j;
+      snprintf(char_i, "%d", i+1);
+      snprintf(char_j, "%d", j+1);
       strcat(filename, "./../triangle/poly/four_holes_");
       strcat(filename, char_i);
       strcat(filename, "_");
