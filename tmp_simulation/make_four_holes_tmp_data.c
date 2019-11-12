@@ -23,7 +23,16 @@ int main(int argc,char *argv[]){
     for (int j = 0; j < n-4; j++) {
       //用いるeleファイル名
       char *filename;
-      filename = './../triangle/poly/four_holes_' + (i+1) + '_' + (j+1) + '.1.ele';
+      char *char_i;
+      char *char_j;
+      sprintf(char_i, "%d", i+1);
+      sprintf(char_j, "%d", j+1);
+      strcat(filename, "./../triangle/poly/four_holes_");
+      strcat(filename, char_i);
+      strcat(filename, "_");
+      strcat(filename, char_j);
+      strcat(filename, ".1.ele");
+      // filename = "./../triangle/poly/four_holes_" + char_i + "_" + char_j + ".1.ele";
       //境界条件タイプ
       boudary_type = atoi(argv[1]);
       clock_t start,end;
@@ -345,9 +354,9 @@ void FEM(int n, char *filename, int x, int y){
   //modified_cholesky(matrix,u_dash,N);
 
   char* tmp_file_position;
-  tmp_file_position = './tmp_data/four_holes_position_data.csv';
+  tmp_file_position = "./tmp_data/four_holes_position_data.csv";
   char* tmp_file_size;
-  tmp_file_size = './tmp_data/four_holes_size_data.csv';
+  tmp_file_size = "./tmp_data/four_holes_size_data.csv";
   
 
   FILE *file_position;
