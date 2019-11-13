@@ -22,9 +22,9 @@ int main(int argc,char *argv[]){
   for (int i = 0; i < n-4; i++) {
     for (int j = 0; j < n-4; j++) {
       //用いるeleファイル名
-      char *filename;
-      char *char_i;
-      char *char_j;
+      char filename[256];
+      char char_i[16];
+      char char_j[16];
       sprintf(char_i, "%d", i+1);
       sprintf(char_j, "%d", j+1);
       strcat(filename, "./../triangle/poly/four_holes_");
@@ -32,7 +32,6 @@ int main(int argc,char *argv[]){
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
-      printf("%s", filename);
       //境界条件タイプ
       boudary_type = atoi(argv[1]);
       clock_t start,end;
@@ -41,6 +40,7 @@ int main(int argc,char *argv[]){
       boundary(n, boudary_type);
       start = clock();
       FEM(n, filename, i+1, j+1);
+      free(filename);
       end = clock();
       time = (double)(end-start)/CLOCKS_PER_SEC;
       printf("%d,%lf\n",n,time);
