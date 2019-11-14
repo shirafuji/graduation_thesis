@@ -1,4 +1,4 @@
- graduation_thesis
+# graduation_thesis
 ___
 卒論用プログラム
 * triangle  
