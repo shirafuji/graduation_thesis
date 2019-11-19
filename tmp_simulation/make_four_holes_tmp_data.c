@@ -24,11 +24,9 @@ int main(int argc,char *argv[]){
   for (int i=0;i<(n-4);i++){
     for (int j=0;j<(n-4);j++){
       //用いるeleファイル名
-      printf("1");
       char filename[256];
       char char_i[16];
       char char_j[16];
-      printf("2");
       sprintf(char_i, "%d", i+1);
       sprintf(char_j, "%d", j+1);
       strcat(filename, "./../triangle/poly/four_holes_");
@@ -36,7 +34,7 @@ int main(int argc,char *argv[]){
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
-      printf("3");
+      printf("%lf", filename);
       clock_t start,end;
       double time;
       init(n, filename);
