@@ -42,7 +42,7 @@ int main(int argc,char *argv[]){
       FEM(n, filename, i+1, j+1);
       end = clock();
       time = (double)(end-start)/CLOCKS_PER_SEC;
-      printf("%d,%lf\n",n,time);
+      printf("%d, %d, %d,%lf\n",i, j, n, time);
     }
   };
   return 0;
