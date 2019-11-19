@@ -353,9 +353,9 @@ void FEM(int n, char *filename, int x, int y){
   cg(matrix,u_dash,N);
   //modified_cholesky(matrix,u_dash,N);
 
-  char tmp_file_position;
+  char *tmp_file_position;
   tmp_file_position = "./tmp_data/four_holes_position_data.csv";
-  char tmp_file_size;
+  char *tmp_file_size;
   tmp_file_size = "./tmp_data/four_holes_size_data.csv";
   
 
