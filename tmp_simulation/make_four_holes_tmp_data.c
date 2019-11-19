@@ -34,7 +34,7 @@ int main(int argc,char *argv[]){
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
-      printf("%s", filename);
+      printf("%s\n", filename);
       clock_t start,end;
       double time;
       init(n, filename);
