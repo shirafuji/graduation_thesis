@@ -21,12 +21,14 @@ int main(int argc,char *argv[]){
   int boudary_type;
   //境界条件タイプ
   boudary_type = atoi(argv[1]);
-  for (int i=0;i<46;i++){
-    for (int j=0;j<46;j++){
+  for (int i=0;i<(n-4);i++){
+    for (int j=0;j<(n-4);j++){
       //用いるeleファイル名
+      printf("1");
       char filename[256];
       char char_i[16];
       char char_j[16];
+      printf("2");
       sprintf(char_i, "%d", i+1);
       sprintf(char_j, "%d", j+1);
       strcat(filename, "./../triangle/poly/four_holes_");
@@ -34,6 +36,7 @@ int main(int argc,char *argv[]){
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
+      printf("3");
       clock_t start,end;
       double time;
       init(n, filename);
@@ -45,6 +48,7 @@ int main(int argc,char *argv[]){
       printf("%d, %d, %d,%lf\n",i, j, n, time);
     }
   }
+  return 0;
 }
 
 // 節点および要素番号を設定する関数
