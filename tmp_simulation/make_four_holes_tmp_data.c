@@ -45,7 +45,6 @@ int main(int argc,char *argv[]){
       printf("%d, %d, %d,%lf\n",i, j, n, time);
     }
   }
-  return 0;
 }
 
 // 節点および要素番号を設定する関数
