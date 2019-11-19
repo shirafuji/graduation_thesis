@@ -43,7 +43,7 @@ int main(int argc,char *argv[]){
       end = clock();
       time = (double)(end-start)/CLOCKS_PER_SEC;
       printf("%d, %d, %d,%lf\n",i, j, n, time);
-    }
+    };
   };
   return 0;
 }
