@@ -19,6 +19,8 @@ void boundary(int, int);
 int main(int argc,char *argv[]){
   int n = 50;
   int boudary_type;
+  //境界条件タイプ
+  boudary_type = atoi(argv[1]);
   for (int i = 0; i < n-4; i++) {
     for (int j = 0; j < n-4; j++) {
       //用いるeleファイル名
@@ -32,8 +34,6 @@ int main(int argc,char *argv[]){
       strcat(filename, "_");
       strcat(filename, char_j);
       strcat(filename, ".1.ele");
-      //境界条件タイプ
-      boudary_type = atoi(argv[1]);
       clock_t start,end;
       double time;
       init(n, filename);
@@ -42,7 +42,7 @@ int main(int argc,char *argv[]){
       FEM(n, filename, i+1, j+1);
       end = clock();
       time = (double)(end-start)/CLOCKS_PER_SEC;
-      printf("%d, %d, %d,%lf\n",i, j, n, time);
+      // printf("%d, %d, %d,%lf\n",i, j, n, time);
     };
   };
   return 0;
