@@ -45,8 +45,8 @@ int main(int argc,char *argv[]){
       time = (double)(end-start)/CLOCKS_PER_SEC;
       printf("%d,%lf\n",n,time);
     }
-    return 0;
   };
+  return 0;
 }
 
 // 節点および要素番号を設定する関数
