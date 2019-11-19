@@ -40,7 +40,6 @@ int main(int argc,char *argv[]){
       boundary(n, boudary_type);
       start = clock();
       FEM(n, filename, i+1, j+1);
-      free(filename);
       end = clock();
       time = (double)(end-start)/CLOCKS_PER_SEC;
       printf("%d,%lf\n",n,time);
