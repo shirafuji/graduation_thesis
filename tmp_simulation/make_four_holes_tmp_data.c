@@ -24,7 +24,7 @@ int main(int argc,char *argv[]){
   for (int i=0;i<(n-4);i++){
     for (int j=0;j<(n-4);j++){
       //用いるeleファイル名
-      char filename[256];
+      char filename[256] = "";
       char char_i[16];
       char char_j[16];
       sprintf(char_i, "%d", i+1);
