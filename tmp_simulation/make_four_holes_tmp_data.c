@@ -19,33 +19,30 @@ void boundary(int, int);
 int main(int argc,char *argv[]){
   int n = 50;
   int boudary_type;
+  int i = atoi(argv[2]);
+  int j = atoi(argv[3]);
+  //用いるeleファイル名
+  char filename[256];
+  char char_i[16];
+  char char_j[16];
+  sprintf(char_i, "%d", i+1);
+  sprintf(char_j, "%d", j+1);
+  strcat(filename, "./../triangle/poly/four_holes_");
+  strcat(filename, char_i);
+  strcat(filename, "_");
+  strcat(filename, char_j);
+  strcat(filename, ".1.ele");
   //境界条件タイプ
   boudary_type = atoi(argv[1]);
-  for (int i=0;i<(n-4);i++){
-    for (int j=0;j<(n-4);j++){
-      //用いるeleファイル名
-      char filename[256] = "";
-      char char_i[16];
-      char char_j[16];
-      sprintf(char_i, "%d", i+1);
-      sprintf(char_j, "%d", j+1);
-      strcat(filename, "./../triangle/poly/four_holes_");
-      strcat(filename, char_i);
-      strcat(filename, "_");
-      strcat(filename, char_j);
-      strcat(filename, ".1.ele");
-      printf("%s\n", filename);
-      clock_t start,end;
-      double time;
-      init(n, filename);
-      boundary(n, boudary_type);
-      start = clock();
-      FEM(n, filename, i+1, j+1);
-      end = clock();
-      time = (double)(end-start)/CLOCKS_PER_SEC;
-      printf("%d, %d, %d,%lf\n",i, j, n, time);
-    }
-  }
+  clock_t start,end;
+  double time;
+  init(n, filename);
+  boundary(n, boudary_type);
+  start = clock();
+  FEM(n, filename, i+1, j+1);
+  end = clock();
+  time = (double)(end-start)/CLOCKS_PER_SEC;
+  printf("%d,%lf\n",n,time);
   return 0;
 }
 
