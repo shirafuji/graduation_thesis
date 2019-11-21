@@ -19,25 +19,31 @@ void boundary(int, int);
 int main(int argc,char *argv[]){
   int n = 50;
   int boudary_type;
-  for (int i = 0; i < n-6; i++) {
-    for (int j = 0; j < n-6; j++) {
-      //用いるeleファイル名
-      char *filename;
-      filename = './../triangle/poly/sixteen_holes_' + (i+1) + '_' + (j+1) + '.1.ele';
-      //境界条件タイプ
-      boudary_type = atoi(argv[1]);
-      clock_t start,end;
-      double time;
-      init(n, filename);
-      boundary(n, boudary_type);
-      start = clock();
-      FEM(n, filename, i+1, j+1);
-      end = clock();
-      time = (double)(end-start)/CLOCKS_PER_SEC;
-      printf("%d,%lf\n",n,time);
-    }
-    return 0;
-  };
+  int i = atoi(argv[2]);
+  int j = atoi(argv[3]);
+  //用いるeleファイル名
+  char filename[256];
+  char char_i[16];
+  char char_j[16];
+  sprintf(char_i, "%d", i+1);
+  sprintf(char_j, "%d", j+1);
+  strcat(filename, "./../triangle/poly/sixteen_holes_");
+  strcat(filename, char_i);
+  strcat(filename, "_");
+  strcat(filename, char_j);
+  strcat(filename, ".1.ele");
+  //境界条件タイプ
+  boudary_type = atoi(argv[1]);
+  clock_t start,end;
+  double time;
+  init(n, filename);
+  boundary(n, boudary_type);
+  start = clock();
+  FEM(n, filename, i+1, j+1);
+  end = clock();
+  time = (double)(end-start)/CLOCKS_PER_SEC;
+  printf("%d,%lf\n",n,time);
+  return 0;
 }
 
 // 節点および要素番号を設定する関数
@@ -345,9 +351,9 @@ void FEM(int n, char *filename, int x, int y){
   //modified_cholesky(matrix,u_dash,N);
 
   char* tmp_file_position;
-  tmp_file_position = './tmp_data/sixteen_holes_position_data.csv';
+  tmp_file_position = "./tmp_data/sixteen_holes_position_data.csv";
   char* tmp_file_size;
-  tmp_file_size = './tmp_data/sixteen_holes_size_data.csv';
+  tmp_file_size = "./tmp_data/sixteen_holes_size_data.csv";
   
 
   FILE *file_position;
