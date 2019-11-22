@@ -371,7 +371,7 @@ void FEM(int n, char *filename, int x, int y){
   fprintf(file_size, "%d,", 3);
   for(i=0; i<N; i++) {
     if (coord[i][0] == 0) {
-      fprintf(file_size, "%lf", u_dash[i]);
+      fprintf(file_size, "%lf,", u_dash[i]);
     }
   }
   fprintf(file_size, "\n");
