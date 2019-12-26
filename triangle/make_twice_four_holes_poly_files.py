@@ -1,7 +1,7 @@
-for a in range(95):
-    for b in range(95):
+for a in range(93):
+    for b in range(93):
 
-        poly_file = './poly/twice_one_hole_' + str(a+1) + '_' + str(b+1) + '.poly'
+        poly_file = './poly/twice_four_holes_' + str(a+1) + '_' + str(b+1) + '.poly'
 
         with open(poly_file, 'w') as f:
             # node
@@ -49,8 +49,8 @@ for a in range(95):
             text = '# hole\n4\n'
             f.write(text)
             hole_count = 1
-            for c in range(2):
-                for d in range(2):
+            for c in range(4):
+                for d in range(4):
                     text = str(hole_count) + ' ' + str(a + 1.8 + c) + ' ' + str(b + 1.1 + d) + '\n'
                     f.write(text)
                     hole_count = hole_count + 1
