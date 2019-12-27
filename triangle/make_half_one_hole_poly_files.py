@@ -19,7 +19,7 @@ for a in range(22):
                 else:
                     x = x + 1.0
             # segment
-            text = '# segment\n1300 0\n'
+            text = '# segment\n1200 0\n'
             f.write(text)
             segment_number = 1
             for i in range(24):
