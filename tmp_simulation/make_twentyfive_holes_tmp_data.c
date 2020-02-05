@@ -27,7 +27,7 @@ int main(int argc,char *argv[]){
   char char_j[16];
   sprintf(char_i, "%d", i+1);
   sprintf(char_j, "%d", j+1);
-  strcat(filename, "./../triangle/poly/four_holes_");
+  strcat(filename, "./../triangle/poly/twentyfive_holes_");
   strcat(filename, char_i);
   strcat(filename, "_");
   strcat(filename, char_j);
