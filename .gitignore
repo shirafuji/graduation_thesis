@@ -2,6 +2,10 @@
 !/triangle/poly/triangle.sh
 !/triangle/poly/twice_triangle.sh
 !/triangle/poly/half_triangle.sh
+/triangle_master/poly/*
+!/triangle_master/poly/triangle.sh
+!/triangle_master/poly/twice_triangle.sh
+!/triangle_master/poly/half_triangle.sh
 /tmp_simulation/a.out
 /tmp_simulation/boundary.txt
 /tmp_simulation/coord.txt
