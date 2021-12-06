@@ -284,7 +284,7 @@ content = str(defect_size) + " " + str(defect_position_x) + " " + str(defect_pos
 check_point = [663, 1275, 1887] #一辺51点とったとき
 for point in check_point:
     for h in range(total_step+1):
-        content += str(u[point*2][h][0]) + " "
+        content += str(u[h][point*2][0]) + " "
 content += "\n"
 # 書き出し
 f = open(output_path, 'a')
