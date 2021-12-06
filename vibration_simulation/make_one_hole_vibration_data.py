@@ -2,11 +2,15 @@
 import numpy as np
 import numpy.linalg as LA
 import sys
+import time
 
 # 引数
 args = sys.argv
 defect_x = int(args[1]) + 1
 defect_y = int(args[2]) + 1
+
+print('start '+str(defect_x)+' '+str(defect_y))
+start = time.time()
 
 # const
 ele_size = 1/2*0.02*0.02
@@ -289,6 +293,10 @@ content += "\n"
 f = open(output_path, 'a')
 f.write(content)
 f.close()
+
+elapsed_time = time.time() - start
+print(elapsed_time)
+print('finish '+str(defect_x)+' '+str(defect_y))
 
 # 今だけグラフ表示
 # output2400 = []
