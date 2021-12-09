@@ -12,15 +12,29 @@ defect_y = int(args[2]) + 1
 print('start '+str(defect_x)+' '+str(defect_y))
 start = time.time()
 
+# 欠陥node特定(0始めでカウント)
+base_node = defect_x + defect_y*51
+defect_node = []
+defect_node.append(base_node+1+51)
+defect_node.append(base_node+1+51+1)
+defect_node.append(base_node+1+51+1+1)
+defect_node.append(base_node+1+51+51)
+defect_node.append(base_node+1+51+51+1)
+defect_node.append(base_node+1+51+51+1+1)
+defect_node.append(base_node+1+51+51+51)
+defect_node.append(base_node+1+51+51+51+1)
+defect_node.append(base_node+1+51+51+51+1+1)
+ndefect = len(defect_node)
+
 # const
 ele_size = 1/2*0.02*0.02
 poi = 0.2
 e = 1000000000*37
 th = 1.0
 row = 2400
-delta_t = 0.0000004
+delta_t = 0.00000008
 pow_delta_t = delta_t*delta_t
-total_time = 0.001
+total_time = 0.0005
 total_step = int(total_time/delta_t)
 load = 100 #外力最大値
 load_time = 0.00001
@@ -38,7 +52,7 @@ with open(node_path) as f_node:
     number_list = s_line.split()
     nnode_str = number_list[0]
     nnode = int(nnode_str)
-    position = np.zeros((nnode, 2), dtype=np.float)
+    position_with_defect = np.zeros((nnode, 2), dtype=np.float)
     for i in range(nnode):
         s_line = f_node.readline()
         number_list = s_line.split()
@@ -46,8 +60,8 @@ with open(node_path) as f_node:
         y_str = number_list[2]
         x = float(x_str)
         y = float(y_str)
-        position[i][0] = x*0.02
-        position[i][1] = y*0.02
+        position_with_defect[i][0] = x*0.02
+        position_with_defect[i][1] = y*0.02
 with open(ele_path) as f_ele:
     s_line = f_ele.readline()
     number_list = s_line.split()
@@ -66,6 +80,26 @@ with open(ele_path) as f_ele:
         eles[h][0] = i
         eles[h][1] = j
         eles[h][2] = k
+
+# 欠陥nodeの調整
+nnode -= len(defect_node)
+# 欠陥nodeを取り除いたposition作成
+position = np.zeros((nnode, 2), dtype=np.float)
+count = 0
+for h in range(len(position_with_defect)-1):
+    if h in defect_node:
+        count = count + 1
+    else:
+        position[h-count] = position_with_defect[h]
+    
+# elesの番号を欠陥の分下げていく
+for h in range(len(defect_node)):
+    target_defect = defect_node[len(defect_node)-1-h]#0始めで何番目か、大きいものから処理を始める
+    target_node_number = target_defect + 1#elesでは1始まりの番号が記録
+    for hh in range(len(eles)):
+        for hhh in range(3):
+            if eles[hh][hhh] > target_node_number:
+                eles[hh][hhh] -= 1
 
 # 全体剛性行列と全体質量行列・全体集中質量行列の宣言
 kt = np.zeros((2*nnode, 2*nnode))
@@ -240,16 +274,28 @@ for h in range(nele):
 
 # 外力生成(線形の増減)(左辺中心3点に荷重がかかるとする)(1辺51点)
 ft = np.zeros((total_step, 2*(nnode), 1))
+# 荷重点の取得
+load_point1 = 0
+load_point2 = 0
+load_point3 = 0
+for h in range(nnode):
+    if position[h][0] == 0:
+        if position[h][1] == 0.48:
+            load_point1 = h
+        if position[h][1] == 0.5:
+            load_point2 = h
+        if position[h][1] == 0.52:
+            load_point3 = h
 # 増える時
 for i in range(load_step):
-    ft[i+1][2448][0] = ft[i][2448][0] + load_diff
-    ft[i+1][2550][0] = ft[i][2550][0] + load_diff
-    ft[i+1][2652][0] = ft[i][2652][0] + load_diff
+    ft[i+1][load_point1*2][0] = ft[i][load_point1*2][0] + load_diff
+    ft[i+1][load_point2*2][0] = ft[i][load_point2*2][0] + load_diff
+    ft[i+1][load_point3*2][0] = ft[i][load_point3*2][0] + load_diff
 # 減る時
 for i in range(load_step):
-    ft[load_step+i+1][2448][0] = ft[load_step+i][2448][0] - load_diff
-    ft[load_step+i+1][2550][0] = ft[load_step+i][2550][0] - load_diff
-    ft[load_step+i+1][2652][0] = ft[load_step+i][2652][0] - load_diff
+    ft[load_step+i+1][load_point1*2][0] = ft[load_step+i][load_point1*2][0] - load_diff
+    ft[load_step+i+1][load_point2*2][0] = ft[load_step+i][load_point2*2][0] - load_diff
+    ft[load_step+i+1][load_point3*2][0] = ft[load_step+i][load_point3*2][0] - load_diff
 # 一辺50点の場合の外力(線形の増減)(左辺中心4点に荷重がかかるとする)
 # ft = np.zeros((total_step, 2*(nnode), 1))
 # for i in range(load_step):
@@ -284,10 +330,23 @@ defect_size = 4
 defect_position_x = defect_x + 2.0
 defect_position_y = defect_y + 2.0
 content = str(defect_size) + " " + str(defect_position_x) + " " + str(defect_position_y) + " "
-check_point = [663, 1275, 1887] #一辺51点とったとき
+#観測点
+check_point1 = 0
+check_point2 = 0
+check_point3 = 0
+for h in range(nnode):
+    if position[h][0] == 0:
+        if position[h][1] == 0.26:
+            check_point1 = h
+        if position[h][1] == 0.5:
+            check_point2 = h
+        if position[h][1] == 0.74:
+            check_point3 = h
+check_point = [check_point1, check_point2, check_point3] #一辺51点とったとき
 for point in check_point:
     for h in range(total_step+1):
-        content += str(u[h][point*2][0]) + " "
+        if h%5 == 0:
+            content += str(u[h][point*2][0]) + " "
 content += "\n"
 # 書き出し
 f = open(output_path, 'a')

@@ -12,6 +12,10 @@ defect_y = int(args[2]) + 1
 print('start '+str(defect_x)+' '+str(defect_y))
 start = time.time()
 
+# 欠陥node特定
+base_point = defect_x + 51*defect_y
+defect_node = base_point + 1 + 51
+
 # const
 ele_size = 1/2*0.02*0.02
 poi = 0.2
@@ -20,7 +24,7 @@ th = 1.0
 row = 2400
 delta_t = 0.0000004
 pow_delta_t = delta_t*delta_t
-total_time = 0.001
+total_time = 0.0005
 total_step = int(total_time/delta_t)
 load = 100 #外力最大値
 load_time = 0.00001
@@ -68,9 +72,12 @@ with open(ele_path) as f_ele:
         eles[h][2] = k
 
 # 全体剛性行列と全体質量行列・全体集中質量行列の宣言
-kt = np.zeros((2*nnode, 2*nnode))
-mt = np.zeros((2*nnode, 2*nnode))
-imt = np.zeros((2*nnode, 2*nnode))
+kt_with_defect = np.zeros((2*nnode, 2*nnode))
+mt_with_defect = np.zeros((2*nnode, 2*nnode))
+imt_with_defect = np.zeros((2*nnode, 2*nnode))
+kt = np.zeros((2*(nnode-1), 2*(nnode-1)))
+mt = np.zeros((2*(nnode-1), 2*(nnode-1)))
+imt = np.zeros((2*(nnode-1), 2*(nnode-1)))
 
 # 剛性行列と質量行列計算の定義
 def calc_ke(ele, position, kt):
@@ -234,22 +241,68 @@ def calc_ime(ele, imt):
 # 合成行列と質量行列の組み込み繰り返し
 for h in range(nele):
     ele = eles[h]
-    kt = calc_ke(ele, position, kt)
-    mt = calc_me(ele, mt)
-    imt = calc_ime(ele, imt)
+    kt_with_defect = calc_ke(ele, position, kt_with_defect)
+    mt_with_defect = calc_me(ele, mt_with_defect)
+    imt_with_defect = calc_ime(ele, imt_with_defect)
 
-# 外力生成(線形の増減)(左辺中心3点に荷重がかかるとする)(1辺51点)
-ft = np.zeros((total_step, 2*(nnode), 1))
+# 欠陥ノードを抜く(mtは使わないため省略)
+#kt作成
+for h in range(2*nnode):
+    for hh in range(2*nnode):
+        if h < 2*defect_node:
+            if hh < 2*defect_node:
+                kt[h][hh] = kt_with_defect[h][hh]
+            elif hh == 2*defect_node:
+                continue
+            elif hh == 2*defect_node+1:
+                continue
+            else:
+                kt[h][hh-2] = kt_with_defect[h][hh]
+        elif h == 2*defect_node:
+            continue
+        elif h == 2*defect_node+1:
+            continue
+        else:
+            if hh < 2*defect_node:
+                kt[h-2][hh] = kt_with_defect[h][hh]
+            elif hh == 2*defect_node:
+                continue
+            elif hh == 2*defect_node+1:
+                continue
+            else:
+                kt[h-2][hh-2] = kt_with_defect[h][hh]
+#imt作成
+for h in range(2*nnode):
+    if h < 2*defect_node:
+        imt[h][h] = imt_with_defect[h][h]
+    elif h == 2*defect_node:
+        continue
+    elif h == 2*defect_node+1:
+        continue
+    else:
+        imt[h-2][h-2] = imt_with_defect[h][h]
+
+# 外力生成(線形の増減)(左辺中心3点に荷重がかかるとする)(1辺51点)(positionから判断するよう変更)
+ft = np.zeros((total_step, 2*(nnode-1), 1))
+point1 = 1224
+point2 = 1275
+point3 = 1326
+if point1 > defect_node:
+    point1 -= 1
+if point2 > defect_node:
+    point2 -= 1
+if point3 > defect_node:
+    point3 -= 1
 # 増える時
 for i in range(load_step):
-    ft[i+1][2448][0] = ft[i][2448][0] + load_diff
-    ft[i+1][2550][0] = ft[i][2550][0] + load_diff
-    ft[i+1][2652][0] = ft[i][2652][0] + load_diff
+    ft[i+1][2*point1][0] = ft[i][2*point1][0] + load_diff
+    ft[i+1][2*point2][0] = ft[i][2*point2][0] + load_diff
+    ft[i+1][2*point3][0] = ft[i][2*point3][0] + load_diff
 # 減る時
 for i in range(load_step):
-    ft[load_step+i+1][2448][0] = ft[load_step+i][2448][0] - load_diff
-    ft[load_step+i+1][2550][0] = ft[load_step+i][2550][0] - load_diff
-    ft[load_step+i+1][2652][0] = ft[load_step+i][2652][0] - load_diff
+    ft[load_step+i+1][2*point1][0] = ft[load_step+i][2*point1][0] - load_diff
+    ft[load_step+i+1][2*point2][0] = ft[load_step+i][2*point2][0] - load_diff
+    ft[load_step+i+1][2*point3][0] = ft[load_step+i][2*point3][0] - load_diff
 # 一辺50点の場合の外力(線形の増減)(左辺中心4点に荷重がかかるとする)
 # ft = np.zeros((total_step, 2*(nnode), 1))
 # for i in range(load_step):
@@ -263,7 +316,7 @@ for i in range(load_step):
 #     ft[load_step+i+1][2500][0] = ft[load_step+i][2500][0] - load_diff
 #     ft[load_step+i+1][2600][0] = ft[load_step+i][2600][0] - load_diff
 # タイムステップ毎の変位設定
-u = np.zeros((total_step+1, 2*nnode, 1))
+u = np.zeros((total_step+1, 2*(nnode-1), 1))
 # 各タイムステップの計算
 ct = imt*alpha
 left_matrix = imt+delta_t*ct/2
@@ -284,7 +337,17 @@ defect_size = 2
 defect_position_x = defect_x + 1.0
 defect_position_y = defect_y + 1.0
 content = str(defect_size) + " " + str(defect_position_x) + " " + str(defect_position_y) + " "
-check_point = [663, 1275, 1887] #一辺51点とったとき
+#観測点
+check_point1 = 663
+check_point2 = 1275
+check_point3 = 1887
+if check_point1 > defect_node:
+    check_point1 -= 1
+if check_point2 > defect_node:
+    check_point2 -= 1
+if check_point3 > defect_node:
+    check_point3 -= 1
+check_point = [check_point1, check_point2, check_point3] #一辺51点とったとき
 for point in check_point:
     for h in range(total_step+1):
         content += str(u[h][point*2][0]) + " "
